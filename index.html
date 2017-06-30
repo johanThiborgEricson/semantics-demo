@@ -114,17 +114,16 @@ You use it by writing the expression in the left field. When you hit "Calculate"
 it will pass what you have written to the interpreter through its expression 
 method. The choise of the name "expression" might seem a little strange, but 
 that will be made clear later on. The result of the interpretation will be 
-presented in the rightmost field. Lets make a dummy interpreter that returns 
-0, 1, 2, ... no matter the input, just to test the calculator. Write an 
-expression in the left field, click calculate (or press enter) and watch the 
-output in the right field increment.
+presented in the rightmost field. Lets make a dummy interpreter that answers 
+every question with 42, just to test the calculator. Write a question in the 
+left field, click calculate ant try to understand the answer given in the right 
+field.
     </p>
     <form id="dummy"></form>
     <script>
 var dummyInterpreter = {
-  i: 0,
-  expression: function() {
-    return this.i++;
+  expression: function(question) {
+    return "The ansver to '" + question + "' is 42.";
   }
 };
 
@@ -142,9 +141,8 @@ JavaScript:
     </p>
     <pre>
 var dummyInterpreter = {
-  i: 0,
-  expression: function() {
-    return this.i++;
+  expression: function(question) {
+    return "The ansver to '" + question + "' is 42.";
   }
 };
 
