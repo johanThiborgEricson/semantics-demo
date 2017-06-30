@@ -199,10 +199,20 @@ interpreter.expression = factory.terminal(/\s*([0-9]+)\s*/, function(number) {
 };
     </pre>
     <p>
-Let's go through that step by step. First we create an InterpreterMethodFactory, 
-which is an object that makes interpreter methods for other objects. Next we 
-create the object that is going to be the interpreter of our language. Then we 
-use the method factory to create a new terminal method. To do that, it needs 
+Let's try that in our Calculator. Write a positive, whole number, possibly with 
+surounding spaces.
+    </p>
+    <form id="number"></form>
+    <script>
+new Calculator(interpreter, document.getElementById("number"));
+    </script>
+    <p>
+In the first line of the code we create an InterpreterMethodFactory, 
+which is an object that makes interpreter methods for other objects. 
+Next we create the object that is going to be the interpreter of our language. 
+Then we 
+use the method factory to create a new terminal method for our interpreter. 
+To do that, it needs 
 two things: the syntax of a number and the semantics of a number. The capturing 
 group of the regular expression provides the syntax and the function provides 
 the semantics of a number. Numbers have a simple semantic in most languages. It 
