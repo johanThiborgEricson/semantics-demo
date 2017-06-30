@@ -36,14 +36,19 @@ interactive. The calculator will look something like this:
 function Calculator(interpreter, formElement) {
   this.interpreter = interpreter;
   this.input = document.createElement("input");
-  this.output = document.createElement("output");
-  this.submit = document.createElement("submit");
+  this.output = document.createElement("input");
+  this.submit = document.createElement("input");
+  this.submit.type = "submit";
   this.submit.value = "calculate";
   this.element = formElement;
   formElement.appendChild(this.input);
   formElement.appendChild(this.submit);
   formElement.appendChild(this.output);
   
+  // otherwise the page relodes
+  formElement.onsubmit = function() {
+    return false;
+  };
   formElement.addEventListener("submit", this);
 }
 
@@ -51,6 +56,7 @@ Calculator.prototype.handleEvent = function() {
   var userInput = this.input.value;
   var result = this.interpreter.expression(userInput);
   this.output.value = result;
+  return false;
 };
 
 describe("The calculator", function() {
@@ -80,14 +86,19 @@ describe("The calculator", function() {
 function Calculator(interpreter, formElement) {
   this.interpreter = interpreter;
   this.input = document.createElement("input");
-  this.output = document.createElement("output");
-  this.submit = document.createElement("submit");
+  this.output = document.createElement("input");
+  this.submit = document.createElement("input");
+  this.submit.type = "submit";
   this.submit.value = "calculate";
   this.element = formElement;
   formElement.appendChild(this.input);
   formElement.appendChild(this.submit);
   formElement.appendChild(this.output);
   
+  // otherwise the page relodes
+  formElement.onsubmit = function() {
+    return false;
+  };
   formElement.addEventListener("submit", this);
 }
 
@@ -95,16 +106,49 @@ Calculator.prototype.handleEvent = function() {
   var userInput = this.input.value;
   var result = this.interpreter.expression(userInput);
   this.output.value = result;
+  return false;
 };
     </pre>
     <p>
 You use it by writing the expression in the left field. When you hit "Calculate" 
 it will pass what you have written to the interpreter through its expression 
 method. The choise of the name "expression" might seem a little strange, but 
-that will be made 
-clear later on. The result of the interpretation will be presented in the 
-rightmost field. 
+that will be made clear later on. The result of the interpretation will be 
+presented in the rightmost field. Lets make a dummy interpreter that returns 
+0, 1, 2,... no matter the input, just to test the calculator.
     </p>
+    <form id="dummy"></form>
+    <script>
+var dummyInterpreter = {
+  i: 0,
+  expression: function() {
+    return this.i++;
+  }
+};
+
+var dummyForm = document.getElementById("dummy");
+new Calculator(dummyInterpreter, dummyForm);
+    </script>
+    <p>
+HTML:
+    </p>
+    <pre>
+&lt;form id="dummy"&gt;&lt;/form&gt;
+    </pre>
+    <p>
+JavaScript:
+    </p>
+    <pre>
+var dummyInterpreter = {
+  i: 0,
+  expression: function() {
+    return this.i++;
+  }
+};
+
+var dummyForm = document.getElementById("dummy");
+new Calculator(dummyInterpreter, dummyForm);
+    </pre>
     <h2>
 Terminals and capturing groups
     </h2>
