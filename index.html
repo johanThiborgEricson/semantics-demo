@@ -84,7 +84,8 @@ describe("The calculator", function() {
 });
     </script>
     <pre>
-function Calculator(interpreter, formElement) {
+function Calculator(interpreter, formElement, name) {
+  this.name = name;
   this.interpreter = interpreter;
   this.input = document.createElement("input");
   this.output = document.createElement("input");
@@ -105,17 +106,22 @@ function Calculator(interpreter, formElement) {
 
 Calculator.prototype.handleEvent = function() {
   var userInput = this.input.value;
-  var result = this.interpreter.expression(userInput);
+  var result = this.interpreter[this.name](userInput);
   this.output.value = result;
   return false;
 };
     </pre>
     <p>
-You use it by writing the expression in the left field. When you hit "Calculate" 
-it will pass what you have written to the interpreter through its expression 
-method. The choise of the name "expression" might seem a little strange, but 
-that will be made clear later on. The result of the interpretation will be 
-presented in the rightmost field. Lets make a dummy interpreter that answers 
+The name argument in the constructor specifies what method of the interpreter 
+we want to use. 
+You use the calculator by writing an expression in the left field. 
+When you hit "Calculate" it will call the method of interpreter that was 
+defined in the name argument of the constructor. It will call that method with 
+the text content of the left field. The result of the interpretation will be 
+presented in the rightmost field. 
+    </p>
+    <p>
+Lets make a dummy interpreter that answers 
 every question with 42, just to test the calculator. Write a question in the 
 left field, click calculate ant try to understand the answer given in the right 
 field.
@@ -192,17 +198,17 @@ of them. Now we are ready to create our first terminal expression!
 var factory = new InterpreterMethodFactory();
 
 var interpreter = {};
-interpreter.expression = factory.terminal(/\s*([0-9]+)\s*/, function(number) {
+interpreter.number = factory.terminal(/\s*([0-9]+)\s*/, function(number) {
   return Number(number);
 });
 
 describe("A simple expression that just handles integers", function() {
   it("handles integers", function() {
-    expect(interpreter.expression("42")).toBe(42);
+    expect(interpreter.number("42")).toBe(42);
   });
   
   it("accepts leading zeros", function() {
-    expect(interpreter.expression("0042")).toBe(42);
+    expect(interpreter.number("0042")).toBe(42);
   });
 })
     </script>
@@ -210,9 +216,9 @@ describe("A simple expression that just handles integers", function() {
 var factory = new InterpreterMethodFactory();
 
 var interpreter = {};
-interpreter.expression = factory.terminal(/\s*([0-9]+)\s*/, function(number) {
+interpreter.number = factory.terminal(/\s*([0-9]+)\s*/, function(number) {
   return Number(number);
-};
+});
     </pre>
     <p>
 Let's try that in our Calculator. Write a positive, whole number, possibly with 
@@ -220,7 +226,7 @@ surounding spaces.
     </p>
     <form id="number"></form>
     <script>
-var numberCalc = new Calculator(interpreter, document.getElementById("number"), "expression");
+var numberCalc = new Calculator(interpreter, document.getElementById("number"), "number");
 describe("The number calculator", function() {
   it("computes", function() {
     numberCalc.input.value = "1";
