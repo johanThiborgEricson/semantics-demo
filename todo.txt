@@ -1,0 +1,2 @@
+Rename expression to number in first example.
+Pass the name of the method to be tested to the calculator.
