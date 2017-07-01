@@ -128,7 +128,22 @@ var dummyInterpreter = {
 };
 
 var dummyForm = document.getElementById("dummy");
-new Calculator(dummyInterpreter, dummyForm);
+var dummyCalculator = new Calculator(dummyInterpreter, dummyForm);
+
+describe("The dummy calculator", function() {
+  it("doesn't throw errors when submited", function() {
+    expect(function() {
+      dummyCalculator.handleEvent();
+    }).not.toThrow();
+    
+    expect(dummyCalculator.output.value).not.toBe("");
+    dummyCalculator.input.value = "";
+    dummyCalculator.output.value = "";
+
+  });
+  
+});
+
     </script>
     <p>
 HTML:
@@ -204,7 +219,19 @@ surounding spaces.
     </p>
     <form id="number"></form>
     <script>
-new Calculator(interpreter, document.getElementById("number"));
+var numberCalc = new Calculator(interpreter, document.getElementById("number"));
+describe("The number calculator", function() {
+  it("computes", function() {
+    numberCalc.input.value = "1";
+    expect(function() {
+      numberCalc.handleEvent();
+    }).not.toThrow();
+    
+    expect(numberCalc.input.value).toBe("1");
+    numberCalc.input.value = "";
+    numberCalc.output.value = "";
+  });
+});
     </script>
     <p>
 In the first line of the code we create an InterpreterMethodFactory, 
