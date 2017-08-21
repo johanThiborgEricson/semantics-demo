@@ -7,3 +7,4 @@ Pass the full match to the terminal as the last argument so you don't have to
 Make sequence accept regular expression arguments and make anonymous terminals 
   with no interpretation.
 Explain that nonTerminalStar is not greedy.
+Update text with new shorter factory method names.

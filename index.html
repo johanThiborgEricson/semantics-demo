@@ -198,7 +198,7 @@ of them. Now we are ready to create our first terminal expression!
 var factory = new InterpreterMethodFactory();
 
 var interpreter = {};
-interpreter.number = factory.terminal(/\s*([0-9]+)\s*/, function(number) {
+interpreter.number = factory.atom(/\s*([0-9]+)\s*/, function(number) {
   return Number(number);
 });
 
@@ -216,7 +216,7 @@ describe("A simple expression that just handles integers", function() {
 var factory = new InterpreterMethodFactory();
 
 var interpreter = {};
-interpreter.number = factory.terminal(/\s*([0-9]+)\s*/, function(number) {
+interpreter.number = factory.atom(/\s*([0-9]+)\s*/, function(number) {
   return Number(number);
 });
     </pre>
@@ -279,7 +279,7 @@ function(string) {code} + /(capturingGroup1)(capturingGroup2).../ + magic ->
 or, more formally
     </p>
     <pre>
-InterpreterMethodFactory.prototype.terminal = function(regexp, callback) {
+InterpreterMethodFactory.prototype.atom = function(regexp, callback) {
   return function(text) {
     var match = regexp.exec(text);
     callback.apply(this, match.slice(1));
@@ -314,9 +314,9 @@ may be used to do some actuall computations, by giving our interpreter the
 ability to add two numbers.
     </p>
     <script>
-interpreter.plusSign = factory.terminal(/(\+)/, function() {});
+interpreter.plusSign = factory.atom(/(\+)/, function() {});
 
-interpreter.add = factory.nonTerminalSequence("number", "plusSign", "number"
+interpreter.add = factory.group("number", "plusSign", "number"
 , function(number1, plusSign, number2) {
   return number1+number2;
 });
@@ -330,9 +330,9 @@ describe("interpreter.add", function() {
 
     </script>
     <pre>
-interpreter.plusSign = factory.terminal(/(\+)/, function() {});
+interpreter.plusSign = factory.atom(/(\+)/, function() {});
 
-interpreter.add = factory.nonTerminalSequence("number", "plusSign", "number"
+interpreter.add = factory.group("number", "plusSign", "number"
 , function(number1, plusSign, number2) {
   return number1+number2;
 });
@@ -372,7 +372,7 @@ I agree that this is a rather awkvard way of doing it. I would rather be able
 to write:
     </p>
     <pre>
-interpreter.add = factory.nonTerminalSequence("number", /\+/, "number"
+interpreter.add = factory.group("number", /\+/, "number"
 , function(number1, number2) {
   return number1+number2;
 });
@@ -396,7 +396,7 @@ More formaly it works like this:
     </p>
     <pre>
 InterpreterMethodFactory.prototype
-.nonTerminalSequence = function(methodName1, methodName2, ..., callback) {
+.group = function(methodName1, methodName2, ..., callback) {
   return function(text) {
     // text is split into text1, text2, ... according to the syntax of 
     // this[methodName1], this[methodName2], ...
